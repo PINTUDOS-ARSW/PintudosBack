@@ -7,8 +7,7 @@ import pintudos.game.model.Trace;
 import pintudos.game.service.TraceService;
 
 @RestController
-@RequestMapping("/traces")
-@CrossOrigin("*") // Permite peticiones desde cualquier frontend
+@RequestMapping("/traces") // Permite peticiones desde cualquier frontend
 public class TraceController {
 
   @Autowired

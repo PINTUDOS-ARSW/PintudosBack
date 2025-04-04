@@ -3,26 +3,35 @@ package pintudos.game.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http)
-    throws Exception {
-    // Desactivamos la seguridad para permitir el acceso sin autenticación
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-      .csrf(csrf -> csrf.disable()) // Desactivar CSRF
-      .authorizeHttpRequests(requests ->
-        requests
-          .requestMatchers("/**")
-          .permitAll() // Permitir acceso a todas las rutas sin autenticación
+      .cors()
+      .and()
+      .csrf()
+      .disable() // Necesario para SockJS
+      .authorizeHttpRequests(authz ->
+        authz
+          .requestMatchers(
+            "/game/**", // SockJS handshake y WebSocket transport
+            "/ws/**", // Si usas /ws como endpoint de registro STOMP
+            "/topic/**", // Canal de suscripciones
+            "/app/**" // Canal de envío desde el cliente
+          )
+          .permitAll()
           .anyRequest()
-          .authenticated()
-      ); // Las demás rutas requieren autenticación
+          .authenticated() // El resto necesita auth
+      )
+      .formLogin()
+      .disable()
+      .httpBasic()
+      .disable();
+
     return http.build();
   }
 }
