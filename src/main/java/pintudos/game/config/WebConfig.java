@@ -15,7 +15,7 @@ public class WebConfig {
       public void addCorsMappings(CorsRegistry registry) {
         registry
           .addMapping("/**")
-          .allowedOrigins("http://localhost:5173", "http://localhost:3000") // Especificar frontend
+          .allowedOrigins("http://3.86.110.183:5173", "http://3.86.110.183:3000") // Especificar frontend
           .allowedMethods("*")
           .allowedHeaders("*"); // Habilitar credenciales
       }
