@@ -88,4 +88,25 @@ public class ChatController {
       }
     }
   }
+
+  @MessageMapping("/hint/{roomId}")
+  public void handleHintRequest(
+    @DestinationVariable String roomId,
+    @Payload String playerName
+  ) {
+    // Obtener la sala actual
+    GameRoom room = gameRoomService.getRoom(roomId);
+    if (room != null && room.getHint() != null) {
+      // Crear un mensaje para enviar la pista
+      ChatMessage hintMessage = new ChatMessage();
+      hintMessage.setSender("System");
+      hintMessage.setMessage(
+        playerName + " solicitó la pista: " + room.getHint()
+      );
+      hintMessage.setTimestamp(LocalDateTime.now());
+
+      // Enviar el mensaje al chat de la sala
+      messagingTemplate.convertAndSend("/topic/chat/" + roomId, hintMessage);
+    }
+  }
 }
