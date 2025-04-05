@@ -1,6 +1,7 @@
 package pintudos.game.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import pintudos.game.model.GameRoom;
 import pintudos.game.model.JoinRoomRequest;
+import pintudos.game.model.PlayerCount;
 import pintudos.game.model.Trace;
 import pintudos.game.service.GameRoomService;
 import pintudos.game.service.TraceService;
@@ -38,18 +40,23 @@ public class GameController {
       request.getRoomId(),
       request.getPlayer()
     );
+
     if (room != null) {
+      // Notificar cambios generales de la sala (ya lo haces)
       messagingTemplate.convertAndSend("/topic/rooms", room);
+
+      // Enviar número de jugadores a los conectados en esa sala
+      int playerCount = room.getPlayers().size();
+      messagingTemplate.convertAndSend(
+        "/topic/room/" + request.getRoomId() + "/players",
+        new PlayerCount(playerCount)
+      );
     }
   }
 
   // Recibir un trazo y enviarlo a todos los miembros de la sala
   @MessageMapping("/trace/{roomId}")
-  @SendTo("/topic/{roomId}/traces")
-  public Trace sendTrace(String roomId, Trace trace) {
-    // Guardar el trazo en la base de datos
-    traceService.saveTrace(trace);
-    gameRoomService.addTraceToRoom(roomId, trace); // Guardar el trazo en la sala
-    return trace; // Enviar el trazo a todos los jugadores en esa sala
+  public void sendTrace(@DestinationVariable String roomId, Trace trace) {
+    messagingTemplate.convertAndSend("/topic/" + roomId + "/traces", trace);
   }
 }

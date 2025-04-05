@@ -9,7 +9,7 @@ import pintudos.game.model.Trace;
 @Service
 public class GameRoomService {
 
-  private Map<String, GameRoom> rooms = new HashMap<>();
+  private final Map<String, GameRoom> rooms = new java.util.concurrent.ConcurrentHashMap<>();
 
   // Crear una nueva sala
   public GameRoom createRoom(String roomId) {
@@ -22,7 +22,9 @@ public class GameRoomService {
   public GameRoom joinRoom(String roomId, String player) {
     GameRoom room = rooms.get(roomId);
     if (room != null) {
+      System.out.println("➡️ Antes de agregar: " + room.getPlayers());
       room.addPlayer(player);
+      System.out.println("✅ Después de agregar: " + room.getPlayers());
     }
     return room;
   }

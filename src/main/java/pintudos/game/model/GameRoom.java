@@ -17,7 +17,9 @@ public class GameRoom {
 
   // Métodos para agregar jugadores y trazos
   public void addPlayer(String player) {
-    players.add(player);
+    if (!players.contains(player)) {
+      players.add(player);
+    }
   }
 
   public void removePlayer(String player) {
