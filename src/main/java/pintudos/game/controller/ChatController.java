@@ -1,16 +1,22 @@
 package pintudos.game.controller;
 
 import java.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import pintudos.game.model.GameRoom;
+import pintudos.game.service.GameRoomService;
 
 @Controller
 public class ChatController {
 
   private final SimpMessagingTemplate messagingTemplate;
+
+  @Autowired
+  private GameRoomService gameRoomService;
 
   public ChatController(SimpMessagingTemplate messagingTemplate) {
     this.messagingTemplate = messagingTemplate;
@@ -55,6 +61,31 @@ public class ChatController {
     @Payload ChatMessage chatMessage
   ) {
     chatMessage.setTimestamp(LocalDateTime.now());
-    messagingTemplate.convertAndSend("/topic/chat/" + roomId, chatMessage);
+
+    // Obtener la sala actual
+    GameRoom room = gameRoomService.getRoom(roomId);
+    if (room != null) {
+      // Verificar si el mensaje coincide con la palabra a adivinar
+      if (
+        room.getWordToGuess() != null &&
+        room.getWordToGuess().equalsIgnoreCase(chatMessage.getMessage())
+      ) {
+        // Enviar mensaje indicando que alguien ganó
+        ChatMessage winnerMessage = new ChatMessage();
+        winnerMessage.setSender("System");
+        winnerMessage.setMessage(
+          chatMessage.getSender() + " ha adivinado la palabra y ganó!"
+        );
+        winnerMessage.setTimestamp(LocalDateTime.now());
+
+        messagingTemplate.convertAndSend(
+          "/topic/chat/" + roomId,
+          winnerMessage
+        );
+      } else {
+        // Enviar el mensaje normal al chat
+        messagingTemplate.convertAndSend("/topic/chat/" + roomId, chatMessage);
+      }
+    }
   }
 }
