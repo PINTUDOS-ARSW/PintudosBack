@@ -14,7 +14,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry
       .addEndpoint("/game")
-      .setAllowedOrigins("http://54.211.95.252:5173") // frontend
+      .setAllowedOrigins("http://localhost:5173") // frontend
       .withSockJS(); // Esto activa los endpoints como /info, /websocket, etc.
   }
 

@@ -7,6 +7,10 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import pintudos.game.model.GameRoom;
 import pintudos.game.service.GameRoomService;
 
@@ -109,4 +113,14 @@ public class ChatController {
       messagingTemplate.convertAndSend("/topic/chat/" + roomId, hintMessage);
     }
   }
+  @GetMapping("/game/{roomId}/secret-word")
+  @ResponseBody
+  public String getSecretWord(@PathVariable String roomId) {
+    GameRoom room = gameRoomService.getRoom(roomId);
+    if (room != null) {
+      return room.getWordToGuess();
+    }
+    return "Room not found";
+  }
+  
 }
