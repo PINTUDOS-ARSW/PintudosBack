@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import pintudos.game.model.CreateRoomRequest;
 import pintudos.game.model.GameRoom;
 import pintudos.game.model.JoinRoomRequest;
 import pintudos.game.model.PlayerCount;
@@ -28,9 +29,12 @@ public class GameController {
 
   // Crear una nueva sala
   @MessageMapping("/createRoom")
-  public void createRoom(String roomId) {
-    GameRoom room = gameRoomService.createRoom(roomId);
-    messagingTemplate.convertAndSend("/topic/rooms", room); // Notificar a los clientes sobre la nueva sala
+  public void createRoom(CreateRoomRequest request) {
+    GameRoom room = gameRoomService.createRoom(
+      request.getRoomId(),
+      request.getPlayer()
+    );
+    messagingTemplate.convertAndSend("/topic/rooms", room);
   }
 
   // Unirse a una sala

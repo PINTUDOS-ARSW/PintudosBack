@@ -9,7 +9,7 @@ public class GameRoom {
   private List<String> players; // Listado de jugadores conectados
   private List<Trace> traces; // Lista de trazos realizados
 
-  public GameRoom(String roomId) {
+  public GameRoom(String roomId, String player) {
     this.roomId = roomId;
     this.players = new ArrayList<>();
     this.traces = new ArrayList<>();

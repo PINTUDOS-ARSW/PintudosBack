@@ -12,8 +12,8 @@ public class GameRoomService {
   private final Map<String, GameRoom> rooms = new java.util.concurrent.ConcurrentHashMap<>();
 
   // Crear una nueva sala
-  public GameRoom createRoom(String roomId) {
-    GameRoom room = new GameRoom(roomId);
+  public GameRoom createRoom(String roomId, String player) {
+    GameRoom room = new GameRoom(roomId, player);
     rooms.put(roomId, room);
     return room;
   }
