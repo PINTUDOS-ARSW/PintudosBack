@@ -12,8 +12,11 @@ import pintudos.game.model.GameRoom;
 import pintudos.game.model.JoinRoomRequest;
 import pintudos.game.model.PlayerCount;
 import pintudos.game.model.Trace;
+import pintudos.game.security.AESCipher;
 import pintudos.game.service.GameRoomService;
 import pintudos.game.service.TraceService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @Controller
 public class GameController {
@@ -26,6 +29,7 @@ public class GameController {
 
   @Autowired
   private SimpMessagingTemplate messagingTemplate;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   // Crear una nueva sala
   @MessageMapping("/createRoom")
@@ -59,8 +63,23 @@ public class GameController {
   }
 
   // Recibir un trazo y enviarlo a todos los miembros de la sala
-  @MessageMapping("/trace/{roomId}")
-  public void sendTrace(@DestinationVariable String roomId, Trace trace) {
-    messagingTemplate.convertAndSend("/topic/" + roomId + "/traces", trace);
+   @MessageMapping("/trace/{roomId}")
+  public void sendTrace(@DestinationVariable String roomId, String encryptedTraceJson) throws Exception {
+    // Primero descifrar el mensaje recibido
+    String decryptedJson = AESCipher.decrypt(encryptedTraceJson);
+
+    // Convertir JSON a objeto Trace
+    Trace trace = objectMapper.readValue(decryptedJson, Trace.class);
+
+    // (Opcional) Procesar el trace si quieres
+
+    // Convertir objeto Trace a JSON
+    String traceJson = objectMapper.writeValueAsString(trace);
+
+    // Cifrar JSON para enviar a clientes
+    String encryptedToSend = AESCipher.encrypt(traceJson);
+
+    // Enviar mensaje cifrado a los clientes suscritos
+    messagingTemplate.convertAndSend("/topic/" + roomId + "/traces", encryptedToSend);
   }
 }
