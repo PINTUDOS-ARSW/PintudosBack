@@ -12,6 +12,7 @@ public class GameRoom {
   private List<Trace> traces; // Lista de trazos realizados
   private String wordToGuess;
   private String hint; // Pista de la palabra
+  private boolean clueAlreadyGiven; // Indica si la pista ya fue dada
 
   public GameRoom(String roomId, String player) {
     this.roomId = roomId;
@@ -32,6 +33,7 @@ public class GameRoom {
     String randomWord = keys.get((int) (Math.random() * keys.size()));
     this.wordToGuess = randomWord;
     this.hint = wordsWithHints.get(randomWord);
+    clueAlreadyGiven = false; // Inicialmente, la pista no ha sido dada
   }
 
   // Métodos para agregar jugadores y trazos
@@ -68,5 +70,13 @@ public class GameRoom {
 
   public String getHint() {
     return hint;
+  }
+
+  public boolean isClueAlreadyGiven() {
+    return clueAlreadyGiven;
+  }
+
+  public void markClueAsGiven() {
+    this.clueAlreadyGiven = true;
   }
 }
