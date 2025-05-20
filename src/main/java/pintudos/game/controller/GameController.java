@@ -12,7 +12,6 @@ import pintudos.game.model.GameRoom;
 import pintudos.game.model.JoinRoomRequest;
 import pintudos.game.model.PlayerCount;
 import pintudos.game.model.Trace;
-import pintudos.game.security.AESCipher;
 import pintudos.game.service.GameRoomService;
 import pintudos.game.service.TraceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
