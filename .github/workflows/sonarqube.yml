@@ -29,10 +29,10 @@ jobs:
 
       - name: Analyze with SonarQube
         uses: SonarSource/sonarqube-scan-action@v1.1.0
-        env:
+         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: https://sonarcloud.io
         with:
           args: >
             -Dsonar.projectKey=PintudosBack
