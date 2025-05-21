@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, synchronize, reopened]
 
 jobs:
   sonarqube:
@@ -23,18 +21,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build project
+      - name: Build project and generate Jacoco coverage
         run: mvn clean verify
 
-      - name: Official SonarQube Scan
+      - name: SonarQube Scan (only on push, not PR)
+        if: github.event_name == 'push'
         uses: SonarSource/sonarqube-scan-action@v5.2.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=PINTUDOS-ARSW_PintudosBack
-            -Dsonar.organization=pintando
-            -Dsonar.sources=src/main/java
-            -Dsonar.tests=src/test/java
-            -Dsonar.java.binaries=target/classes
-            -Dsonar.host.url=https://sonarcloud.io
