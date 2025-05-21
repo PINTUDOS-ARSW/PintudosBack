@@ -28,8 +28,13 @@ jobs:
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2
-        with:
-          projectKey: PINTUDOS-ARSW_PintudosBack
-          organization: pintando
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=PINTUDOS-ARSW_PintudosBack
+            -Dsonar.organization=pintando
+            -Dsonar.sources=src/main/java
+            -Dsonar.tests=src/test/java
+            -Dsonar.java.binaries=target/classes
+            -Dsonar.sourceEncoding=UTF-8
