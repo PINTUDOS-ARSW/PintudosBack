@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pintudos.game.model.Trace;
+import pintudos.game.model.TraceDTO;
 import pintudos.game.service.TraceService;
 
 @RestController
@@ -15,7 +16,13 @@ public class TraceController {
 
   // Guardar un trazo
   @PostMapping
-  public Trace saveTrace(@RequestBody Trace trace) {
+  public Trace saveTrace(@RequestBody TraceDTO tracedDto) {
+    Trace trace = new Trace(
+      tracedDto.getRoomId(),
+      tracedDto.getPoints(),
+      tracedDto.getColor(),
+      tracedDto.getWidth()
+    );
     return traceService.saveTrace(trace); // Guardamos el trazo
   }
 
