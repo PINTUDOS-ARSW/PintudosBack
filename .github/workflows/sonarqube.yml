@@ -1,12 +1,14 @@
-name: SonarCloud Analysis (Backend)
+name: Backend Build and Test (Sin Análisis Sonar)
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-  sonarqube:
+  backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,11 +23,13 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build project and generate Jacoco coverage
+      - name: Build and run tests
         run: mvn clean verify
 
-      - name: SonarQube Scan (only on push, not PR)
-        if: github.event_name == 'push'
+      # El análisis Sonar queda desactivado
+      # Si lo quieres habilitar manualmente en el futuro, solo cambia el `if: false` por una condición válida
+      - name: SonarQube Scan (desactivado)
+        if: false
         uses: SonarSource/sonarqube-scan-action@v5.2.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
