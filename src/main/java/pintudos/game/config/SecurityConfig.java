@@ -14,23 +14,17 @@ public class SecurityConfig {
       .cors()
       .and()
       .csrf()
-      .disable() // Necesario para SockJS
-      .authorizeHttpRequests(authz ->
-        authz
+      .disable() // Recomendado si usas WebSockets o APIs sin cookies
+      .authorizeHttpRequests(authz -> authz
           .requestMatchers(
-            "/game/**", // SockJS handshake y WebSocket transport
-            "/ws/**", // Si usas /ws como endpoint de registro STOMP
-            "/topic/**", // Canal de suscripciones
-            "/app/**" // Canal de envío desde el cliente
-          )
-          .permitAll()
-          .anyRequest()
-          .authenticated() // El resto necesita auth
+              "/", "/login/**", "/error", "/css/**", "/js/**"
+          ).permitAll() // Archivos públicos
+          .requestMatchers(
+              "/ws/**", "/game/**", "/app/**", "/topic/**"
+          ).authenticated() // Requieren login
+          .anyRequest().authenticated()
       )
-      .formLogin()
-      .disable()
-      .httpBasic()
-      .disable();
+      .oauth2Login(); // Habilita login con Google
 
     return http.build();
   }
