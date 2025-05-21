@@ -21,7 +21,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'  # o 11, según uses en tu proyecto
+          java-version: '21'  # o 11, según uses en tu proyecto
           distribution: 'temurin'
 
       - name: Build project
