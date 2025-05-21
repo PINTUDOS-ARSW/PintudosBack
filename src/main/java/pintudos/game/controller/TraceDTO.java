@@ -1,12 +1,10 @@
-package pintudos.game.model;
+package pintudos.game.controller;
 
 import java.util.List;
 import org.springframework.data.annotation.Id;
+import pintudos.game.model.CustomPoint;
 
 public class TraceDTO {
-
-  @Id
-  private String id;
 
   private String roomId;
   private List<CustomPoint> points; // Usar la clase personalizada
@@ -26,13 +24,6 @@ public class TraceDTO {
   }
 
   // Getters y Setters
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public String getRoomId() {
     return roomId;

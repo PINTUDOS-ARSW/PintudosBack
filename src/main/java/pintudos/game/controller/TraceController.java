@@ -4,7 +4,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pintudos.game.model.Trace;
-import pintudos.game.model.TraceDTO;
 import pintudos.game.service.TraceService;
 
 @RestController
