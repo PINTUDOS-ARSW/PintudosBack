@@ -17,7 +17,8 @@ public class WebConfig {
           .addMapping("/**")
           .allowedOrigins("http://localhost:5173", "http://localhost:3000") // Especificar frontend
           .allowedMethods("*")
-          .allowedHeaders("*"); // Habilitar credenciales
+          .allowedHeaders("*")
+          .allowCredentials(true); // Habilitar credenciales
       }
     };
   }
