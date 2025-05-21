@@ -1,4 +1,4 @@
-name: Build and SonarQube Analysis (Backend)
+name: SonarCloud Analysis (Backend)
 
 on:
   push:
@@ -23,18 +23,13 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build project with Maven
+      - name: Build project
         run: mvn clean verify
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v2
         with:
           projectKey: PINTUDOS-ARSW_PintudosBack
           organization: pintando
-          extraProperties: |
-            sonar.sources=src/main/java
-            sonar.tests=src/test/java
-            sonar.java.binaries=target/classes
-            sonar.sourceEncoding=UTF-8
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
