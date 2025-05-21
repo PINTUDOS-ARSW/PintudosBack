@@ -1,41 +1,40 @@
-name: SonarQube analysis
+name: Build and SonarQube Analysis (Backend)
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
-
-permissions:
-  pull-requests: read
+    types: [opened, synchronize, reopened]
 
 jobs:
-  Analysis:
+  sonarqube:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '21'  # o 11, según uses en tu proyecto
+          java-version: '21'
           distribution: 'temurin'
 
-      - name: Build project
+      - name: Build project with Maven
         run: mvn clean verify
 
-      - name: Analyze with SonarQube
-        uses: SonarSource/sonarqube-scan-action@v1.1.0
-         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://sonarcloud.io
         with:
-          args: >
-            -Dsonar.projectKey=PintudosBack
-            -Dsonar.sources=src/main/java
-            -Dsonar.tests=src/test/java
-            -Dsonar.java.binaries=target/classes
+          projectKey: PINTUDOS-ARSW_PintudosBack
+          organization: pintando
+          extraProperties: |
+            sonar.sources=src/main/java
+            sonar.tests=src/test/java
+            sonar.java.binaries=target/classes
+            sonar.sourceEncoding=UTF-8
