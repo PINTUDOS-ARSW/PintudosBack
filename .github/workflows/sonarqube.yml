@@ -28,8 +28,7 @@ jobs:
 
       # El análisis Sonar queda desactivado
       # Si lo quieres habilitar manualmente en el futuro, solo cambia el `if: false` por una condición válida
-      - name: SonarQube Scan (desactivado)
-        if: false
+      - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5.2.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
