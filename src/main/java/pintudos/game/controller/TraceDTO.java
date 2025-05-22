@@ -1,12 +1,10 @@
 package pintudos.game.controller;
 
 import java.util.List;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import pintudos.game.model.CustomPoint;
 
-@Data
 @Getter
 @Setter
 public class TraceDTO {
