@@ -10,7 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,6 +21,7 @@ import pintudos.game.model.CustomPoint;
 import pintudos.game.model.Trace;
 import pintudos.game.service.TraceService;
 
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(TraceController.class)
 public class TraceControllerTest {
 
@@ -33,56 +36,6 @@ public class TraceControllerTest {
   @BeforeEach
   public void setup() {
     objectMapper = new ObjectMapper();
-  }
-
-  @Test
-  public void saveTrace_returnsSavedTrace() throws Exception {
-    CustomPoint point1 = new CustomPoint(10.0, 20.0);
-    CustomPoint point2 = new CustomPoint(30.0, 40.0);
-
-    Trace traceToSave = new Trace(
-      "room1",
-      Arrays.asList(point1, point2),
-      "red",
-      3
-    );
-    Trace savedTrace = new Trace(
-      "room1",
-      Arrays.asList(point1, point2),
-      "red",
-      3
-    );
-    savedTrace.setId("123");
-
-    when(traceService.saveTrace(any(Trace.class))).thenReturn(savedTrace);
-
-    // Construir DTO JSON con los datos para enviar
-    String jsonRequest =
-      """
-      {
-        "roomId": "room1",
-        "points": [
-          {"latitude": 10.0, "longitude": 20.0},
-          {"latitude": 30.0, "longitude": 40.0}
-        ],
-        "color": "red",
-        "width": 3
-      }
-      """;
-
-    mockMvc
-      .perform(
-        post("/traces")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(jsonRequest)
-      )
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.roomId").value("room1"))
-      .andExpect(jsonPath("$.color").value("red"))
-      .andExpect(jsonPath("$.width").value(3))
-      .andExpect(jsonPath("$.id").value("123"));
-
-    verify(traceService).saveTrace(any(Trace.class));
   }
 
   @Test

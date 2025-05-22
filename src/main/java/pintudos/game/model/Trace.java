@@ -30,6 +30,8 @@ public class Trace {
     this.width = width;
   }
 
+  public Trace() {}
+
   // Getters y Setters
   public String getId() {
     return id;

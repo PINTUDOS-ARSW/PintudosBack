@@ -27,6 +27,14 @@ public class ChatController {
     this.messagingTemplate = messagingTemplate;
   }
 
+  public ChatController(
+    SimpMessagingTemplate messagingTemplate,
+    GameRoomService gameRoomService
+  ) {
+    this.messagingTemplate = messagingTemplate;
+    this.gameRoomService = gameRoomService;
+  }
+
   public static class ChatMessage {
 
     private String sender;
