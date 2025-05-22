@@ -13,12 +13,14 @@ public class WebConfig {
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry
-          .addMapping("/**")
-                .allowedOrigins("http://game.arswpintudos.com:5173", "http://www.arswpintudos.com:3000", "http://game.arswpintudos.com")
-          .allowedMethods("*")
-          .allowedHeaders("*")
-          .allowCredentials(true); // Habilitar credenciales
+        registry.addMapping("/**")
+                .allowedOrigins(
+                        "https://game.arswpintudos.com",
+                        "https://api.arswpintudos.com"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
       }
     };
   }
