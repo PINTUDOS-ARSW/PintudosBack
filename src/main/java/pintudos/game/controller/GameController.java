@@ -3,19 +3,14 @@ package pintudos.game.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import pintudos.game.model.CreateRoomRequest;
 import pintudos.game.model.GameRoom;
-import pintudos.game.model.JoinRoomRequest;
 import pintudos.game.model.PlayerCount;
+import pintudos.game.model.RoomRequest;
 import pintudos.game.model.Trace;
 import pintudos.game.service.GameRoomService;
 import pintudos.game.service.TraceService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 @Controller
 public class GameController {
@@ -28,11 +23,10 @@ public class GameController {
 
   @Autowired
   private SimpMessagingTemplate messagingTemplate;
-  private final ObjectMapper objectMapper = new ObjectMapper();
 
   // Crear una nueva sala
   @MessageMapping("/createRoom")
-  public void createRoom(CreateRoomRequest request) {
+  public void createRoom(RoomRequest request) {
     GameRoom room = gameRoomService.createRoom(
       request.getRoomId(),
       request.getPlayer()
@@ -42,7 +36,7 @@ public class GameController {
 
   // Unirse a una sala
   @MessageMapping("/joinRoom")
-  public void joinRoom(JoinRoomRequest request) {
+  public void joinRoom(RoomRequest request) {
     GameRoom room = gameRoomService.joinRoom(
       request.getRoomId(),
       request.getPlayer()
@@ -65,4 +59,5 @@ public class GameController {
   @MessageMapping("/trace/{roomId}")
   public void sendTrace(@DestinationVariable String roomId, Trace trace) {
     messagingTemplate.convertAndSend("/topic/" + roomId + "/traces", trace);
-}}
+  }
+}

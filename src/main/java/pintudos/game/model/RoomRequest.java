@@ -1,6 +1,6 @@
 package pintudos.game.model;
 
-public class CreateRoomRequest {
+public class RoomRequest {
 
   private String roomId;
   private String player;

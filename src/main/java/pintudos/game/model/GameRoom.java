@@ -19,7 +19,6 @@ public class GameRoom {
     this.players = new ArrayList<>();
     this.traces = new ArrayList<>();
     this.players.add("player");
-    clueAlreadyGiven = false; // Inicialmente, la pista no ha sido dada
 
     // Mapa de palabras y pistas
     Map<String, String> wordsWithHints = new HashMap<>();
@@ -34,6 +33,7 @@ public class GameRoom {
     String randomWord = keys.get((int) (Math.random() * keys.size()));
     this.wordToGuess = randomWord;
     this.hint = wordsWithHints.get(randomWord);
+    clueAlreadyGiven = false; // Inicialmente, la pista no ha sido dada
   }
 
   // Métodos para agregar jugadores y trazos
@@ -71,7 +71,8 @@ public class GameRoom {
   public String getHint() {
     return hint;
   }
-   public boolean isClueAlreadyGiven() {
+
+  public boolean isClueAlreadyGiven() {
     return clueAlreadyGiven;
   }
 

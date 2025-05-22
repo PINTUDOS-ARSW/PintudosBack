@@ -15,7 +15,13 @@ public class TraceController {
 
   // Guardar un trazo
   @PostMapping
-  public Trace saveTrace(@RequestBody Trace trace) {
+  public Trace saveTrace(@RequestBody TraceDTO tracedDto) {
+    Trace trace = new Trace(
+      tracedDto.getRoomId(),
+      tracedDto.getPoints(),
+      tracedDto.getColor(),
+      tracedDto.getWidth()
+    );
     return traceService.saveTrace(trace); // Guardamos el trazo
   }
 
