@@ -8,30 +8,30 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-      .cors()
-      .and()
-      .csrf()
-      .disable() // Necesario para SockJS
-      .authorizeHttpRequests(authz ->
-        authz
-          .requestMatchers(
-            "/game/**", // SockJS handshake y WebSocket transport
-            "/ws/**", // Si usas /ws como endpoint de registro STOMP
-            "/topic/**", // Canal de suscripciones
-            "/app/**" // Canal de envío desde el cliente
-          )
-          .permitAll()
-          .anyRequest()
-          .authenticated() // El resto necesita auth
-      )
-      .formLogin()
-      .disable()
-      .httpBasic()
-      .disable();
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                .authorizeHttpRequests(authz -> authz
+                        // Permite acceso sin autenticación a los endpoints SockJS
+                        .requestMatchers(
+                                "/game", "/game/**", "/game/info/**"
+                        ).permitAll()
+                        // Archivos públicos
+                        .requestMatchers(
+                                "/", "/login/", "/error", "/css/", "/js/"
+                        ).permitAll()
+                        // Endpoints que requieren autenticación
+                        .requestMatchers(
+                                "/app/**", "/topic/**"
+                        ).authenticated()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login();
 
-    return http.build();
-  }
+        return http.build();
+    }
 }
