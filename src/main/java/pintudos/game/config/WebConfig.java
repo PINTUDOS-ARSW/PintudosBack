@@ -15,7 +15,7 @@ public class WebConfig {
       public void addCorsMappings(CorsRegistry registry) {
         registry
           .addMapping("/**")
-                .allowedOrigins("http://game.arswpintudos.com:5173", "http://www.arswpintudos.com:3000")
+                .allowedOrigins("http://game.arswpintudos.com:5173", "http://www.arswpintudos.com:3000", "http://game.arswpintudos.com")
           .allowedMethods("*")
           .allowedHeaders("*")
           .allowCredentials(true); // Habilitar credenciales
