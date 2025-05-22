@@ -14,12 +14,11 @@ public class WebConfig {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry
-                .addMapping("/**")
-                .allowedOrigins("http://localhost:5173", "http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .exposedHeaders("Set-Cookie", "Authorization")
-                .allowCredentials(true);
+          .addMapping("/**")
+                .allowedOrigins("https://game.arswpintudos.com:5173", "https://www.arswpintudos.com:3000")
+          .allowedMethods("*")
+          .allowedHeaders("*")
+          .allowCredentials(true); // Habilitar credenciales
       }
     };
   }
