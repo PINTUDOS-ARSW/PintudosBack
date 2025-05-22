@@ -1,8 +1,6 @@
 package pintudos.game.controller;
 
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,13 +17,7 @@ import pintudos.game.service.GameRoomService;
 public class ChatController {
 
   private final SimpMessagingTemplate messagingTemplate;
-
-  @Autowired
-  private GameRoomService gameRoomService;
-
-  public ChatController(SimpMessagingTemplate messagingTemplate) {
-    this.messagingTemplate = messagingTemplate;
-  }
+  private final GameRoomService gameRoomService;
 
   public ChatController(
     SimpMessagingTemplate messagingTemplate,
@@ -135,16 +127,11 @@ public class ChatController {
 
   @GetMapping("/game/{roomId}/clue")
   public ResponseEntity<String> getClue(@PathVariable String roomId) {
-    // Aquí se asegura de que solo el primer jugador que haga la solicitud obtenga la pista
-    // Si ya se ha enviado la pista, se puede devolver un error o un mensaje indicando que ya fue entregada
     GameRoom room = gameRoomService.getRoom(roomId);
     if (room.isClueAlreadyGiven()) {
       return ResponseEntity.ok("La pista ya ha sido entregada a otro jugador.");
     }
-
-    // Marca la pista como entregada para la sala
     room.markClueAsGiven();
-
     return ResponseEntity.ok(room.getHint());
   }
 }
